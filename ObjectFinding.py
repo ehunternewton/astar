@@ -24,7 +24,7 @@ class Cell:
 
 
 class AStar:
-    def __init__(self, grid_size=10, number_of_walls=5):
+    def __init__(self, grid_size=16, number_of_walls=0):
         self.opened = []
         heapq.heapify(self.opened)
         self.closed = set()
@@ -180,17 +180,15 @@ class AStar:
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))
 
 
-size = int(input("Enter map size: "))
-obstacles = int(input("Enter number of obstacles: "))
-startX = int(input("Enter Starting X Coordinate from 0 to " + str(size-1) + ': '))
-startY = int(input("Enter Starting Y Coordinate from 0 to " + str(size-1) + ': '))
+#size = int(input("Enter map size: "))
+#obstacles = int(input("Enter number of obstacles: "))
+#startX = int(input("Enter Starting X Coordinate from 0 to " + str(size-1) + ': '))
+#startY = int(input("Enter Starting Y Coordinate from 0 to " + str(size-1) + ': '))
 
 
-for i in range(2):
-    n = AStar(grid_size=size, number_of_walls=obstacles)
-    targetX = randint(0, size-1)
-    targetY = randint(0, size-1)
-    n.init_grid(startX=startX, startY=startY,
-                targetX=targetX, targetY=targetY)
-    n.process()
-    print(n.finalPos)
+
+n = AStar()
+n.init_grid(startX=4, startY=7,
+            targetX=3, targetY=2)
+n.process()
+print(n.finalPos)
