@@ -1,4 +1,5 @@
 import heapq
+from random import randint
 
 
 class Cell:
@@ -23,29 +24,41 @@ class Cell:
 
 
 class AStar:
-    def __init__(self, grid_size=5):
+    def __init__(self, grid_size=10, number_of_walls=5):
         self.opened = []
         heapq.heapify(self.opened)
         self.closed = set()
         self.cells = []
         self.grid_size = grid_size
+        self.number_of_walls = number_of_walls
         self.grid_height = self.grid_size
         self.grid_width = self.grid_size
         self.start = Cell(0, 0, True)
         self.end = Cell(self.grid_size-1, self.grid_size-1, True)
 
     def init_grid(self):
-        walls = ((4, 4), (3, 5), (2, 4))
+        walls = []
+
+        for i in range(self.number_of_walls):
+            wallsCoordinate = []
+            wallsCoordinate.append(randint(0, self.grid_size-1))
+            wallsCoordinate.append(randint(0, self.grid_size - 1))
+            walls.append(wallsCoordinate)
+
 
         for x in range(self.grid_width):
             for y in range(self.grid_height):
-                if (x, y) in walls:
+                if [x, y] in walls:
                     reachable = False
                 else:
                     reachable = True
                 self.cells.append(Cell(x, y, reachable))
-        self.start = self.get_cell(0, 0)
-        self.end = self.get_cell(self.grid_size-1, self.grid_size-1)
+
+        startX = int(input("Enter Starting X Coordinate from 0 to " + str(self.grid_size-1) + ': '))
+        startY = int(input("Enter Starting Y Coordinate from 0 to " + str(self.grid_size - 1) + ': '))
+        self.start = self.get_cell(startX, startY)
+        self.end = self.get_cell(randint(0, self.grid_size-1), randint(0, self.grid_size-1))
+
 
     def get_heuristic(self, cell):
         """
@@ -55,7 +68,7 @@ class AStar:
         @param cell
         @returns heuristic value H
         """
-        return self.grid_size * (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
+        return 10 * (abs(cell.x - self.end.x) + abs(cell.y - self.end.y))
 
     def get_cell(self, x, y):
         """
@@ -103,25 +116,26 @@ class AStar:
             row = []
             for x in range(self.grid_width):
                 if self.cells[self.grid_size * x + y].reachable:
-                    row.append(0)
+                    row.append('-')
                 else:
-                    row.append(1)
+                    row.append('X')
             grid.append(row)
 
         cell = self.end
-        grid[cell.y][cell.x] = 2
+        grid[cell.y][cell.x] = 'T'
         while cell.parent is not self.start:
             cell = cell.parent
-            grid[cell.y][cell.x] = 3
-            # print('path: cell: %d,%d' % (cell.x, cell.y))
+            grid[cell.y][cell.x] = 'o'
+            print('path: cell: %d,%d' % (cell.x, cell.y))
         cell = self.start
-        grid[cell.y][cell.x] = 3
+        grid[cell.y][cell.x] = 'S'
         for row in grid:
             print(row)
-        print("0: empty cell\n"
-              "1: unreachable cell: e.g. chair\n"
-              "2: ending cell\n"
-              "3: path\n")
+        print(" '-': empty cell\n"
+              " 'X': unreachable cell: e.g. chair\n"
+              " 'T': ending cell\n"
+              " 'o': path\n"
+              " 'S': start position\n")
 
     def update_cell(self, adj, cell):
         """
@@ -130,7 +144,7 @@ class AStar:
         @param adj adjacent cell to current cell
         @param cell current cell being processed
         """
-        adj.g = cell.g + self.grid_size
+        adj.g = cell.g + 10
         adj.h = self.get_heuristic(adj)
         adj.parent = cell
         adj.f = adj.h + adj.g
@@ -163,7 +177,8 @@ class AStar:
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))
 
 
-n = AStar()
-print(n.grid_size)
+size = int(input("Enter map size: "))
+obstacles = int(input("Enter number of obstacles: "))
+n = AStar(grid_size=size, number_of_walls=obstacles)
 n.init_grid()
 n.process()
