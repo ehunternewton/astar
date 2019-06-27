@@ -24,7 +24,7 @@ class Cell:
 
 
 class AStar:
-    def __init__(self, finalPosX, finalPosY, grid_size=16 ):
+    def __init__(self, finalPosX, finalPosY, grid_size=16):
         self.opened = []
         heapq.heapify(self.opened)
         self.closed = set()
@@ -38,6 +38,7 @@ class AStar:
         self.finalPosX = finalPosX
         self.finalPosY = finalPosY
         self.finalPos = [self.finalPosX, self.finalPosY]
+        self.path = []
         self.targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12] ]
 
     def init_grid(self, startX, startY, targetX, targetY):
@@ -143,6 +144,8 @@ class AStar:
         if len(path) > 0:
             self.finalPos = path[0]
             print('Final Pos:', self.finalPos)
+        for i in path:
+            self.path.append(i)
 
     def update_cell(self, adj, cell):
         """
@@ -185,11 +188,13 @@ class AStar:
 
 n = AStar(finalPosX=4, finalPosY=6)
 for i in n.targets:
+    path = n.path
     n = AStar(finalPosX=n.finalPos[0], finalPosY=n.finalPos[1])
+    n.path = path
     targetX = i[0]
     targetY = i[1]
     n.init_grid(startX=n.finalPos[0], startY=n.finalPos[1],
                 targetX=targetX, targetY=targetY)
     n.process()
-    print(n.finalPos)
+    print(n.path)
 
