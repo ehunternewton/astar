@@ -35,8 +35,9 @@ class AStar:
         self.grid_width = self.grid_size
         self.start = Cell(0, 0, True)
         self.end = Cell(self.grid_size-1, self.grid_size-1, True)
+        self.finalPos = []
 
-    def init_grid(self):
+    def init_grid(self, startX, startY, targetX, targetY):
         walls = []
 
         for i in range(self.number_of_walls):
@@ -54,10 +55,8 @@ class AStar:
                     reachable = True
                 self.cells.append(Cell(x, y, reachable))
 
-        startX = int(input("Enter Starting X Coordinate from 0 to " + str(self.grid_size-1) + ': '))
-        startY = int(input("Enter Starting Y Coordinate from 0 to " + str(self.grid_size - 1) + ': '))
         self.start = self.get_cell(startX, startY)
-        self.end = self.get_cell(randint(0, self.grid_size-1), randint(0, self.grid_size-1))
+        self.end = self.get_cell(targetX,targetY)
 
 
     def get_heuristic(self, cell):
@@ -111,6 +110,7 @@ class AStar:
         #         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         #         [0, 0, 0, 0, 0, 0, 0, 0, 0, 2]]
 
+        path = []
         grid = []
         for y in range(self.grid_height):
             row = []
@@ -127,6 +127,7 @@ class AStar:
             cell = cell.parent
             grid[cell.y][cell.x] = 'o'
             print('path: cell: %d,%d' % (cell.x, cell.y))
+            path.append([cell.x, cell.y])
         cell = self.start
         grid[cell.y][cell.x] = 'S'
         for row in grid:
@@ -136,6 +137,8 @@ class AStar:
               " 'T': ending cell\n"
               " 'o': path\n"
               " 'S': start position\n")
+        if len(path) > 0:
+            self.finalPos = path[0]
 
     def update_cell(self, adj, cell):
         """
@@ -179,6 +182,15 @@ class AStar:
 
 size = int(input("Enter map size: "))
 obstacles = int(input("Enter number of obstacles: "))
-n = AStar(grid_size=size, number_of_walls=obstacles)
-n.init_grid()
-n.process()
+startX = int(input("Enter Starting X Coordinate from 0 to " + str(size-1) + ': '))
+startY = int(input("Enter Starting Y Coordinate from 0 to " + str(size-1) + ': '))
+
+
+for i in range(2):
+    n = AStar(grid_size=size, number_of_walls=obstacles)
+    targetX = randint(0, size-1)
+    targetY = randint(0, size-1)
+    n.init_grid(startX=startX, startY=startY,
+                targetX=targetX, targetY=targetY)
+    n.process()
+    print(n.finalPos)
