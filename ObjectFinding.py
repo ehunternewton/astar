@@ -186,7 +186,7 @@ class AStar:
 #startY = int(input("Enter Starting Y Coordinate from 0 to " + str(size-1) + ': '))
 
 
-
+targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12], ]
 n = AStar()
 n.init_grid(startX=4, startY=7,
             targetX=3, targetY=2)
