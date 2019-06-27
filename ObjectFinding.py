@@ -61,7 +61,6 @@ class AStar:
         self.start = self.get_cell(startX, startY)
         self.end = self.get_cell(targetX,targetY)
 
-
     def get_heuristic(self, cell):
         """
         Compute the heuristic value H for a cell: distance between
@@ -183,7 +182,9 @@ class AStar:
                         # add adj cell to open list
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))
 
+
 n = AStar(finalPosX=4, finalPosY=6)
+
 for i in n.targets:
     n = AStar(finalPosX=n.finalPos[0], finalPosY=n.finalPos[1])
     targetX = i[0]
@@ -191,5 +192,7 @@ for i in n.targets:
     n.init_grid(startX=n.finalPos[0], startY=n.finalPos[1],
                 targetX=targetX, targetY=targetY)
     n.process()
+    n.finalPos[0] = targetX
+    n.finalPos[1] = targetY
     print(n.finalPos)
 
