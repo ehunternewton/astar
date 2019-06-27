@@ -39,6 +39,7 @@ class AStar:
         self.finalPosY = finalPosY
         self.finalPos = [self.finalPosX, self.finalPosY]
         self.path = []
+        self.path = list(set(self.path))
         self.targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12] ]
 
     def init_grid(self, startX, startY, targetX, targetY):
@@ -197,11 +198,8 @@ for i in n.targets:
     n.init_grid(startX=n.finalPos[0], startY=n.finalPos[1],
                 targetX=targetX, targetY=targetY)
     n.process()
-<<<<<<< HEAD
     n.finalPos[0] = targetX
     n.finalPos[1] = targetY
     print(n.finalPos)
-=======
     print(n.path)
->>>>>>> 06dca8f30708d93cc16d08e60903fd8098e93da9
 
