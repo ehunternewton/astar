@@ -35,7 +35,7 @@ class AStar:
         self.grid_width = self.grid_size
         self.start = Cell(0, 0, True)
         self.end = Cell(self.grid_size-1, self.grid_size-1, True)
-        self.finalPos = []
+        self.finalPos = [4,6]
         self.targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12] ]
 
     def init_grid(self, startX, startY, targetX, targetY):
@@ -181,7 +181,10 @@ class AStar:
                         heapq.heappush(self.opened, (adj_cell.f, adj_cell))
 
 n = AStar()
-n.init_grid(startX=4, startY=7,
-            targetX=3, targetY=2)
-n.process()
-print(n.finalPos)
+for i in n.targets:
+    targetX = i[0]
+    targetY = i[1]
+    n.init_grid(startX=n.finalPos[0], startY=n.finalPos[1],
+                targetX=targetX, targetY=targetY)
+    n.process()
+    print(n.finalPos)
