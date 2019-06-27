@@ -35,8 +35,8 @@ class AStar:
         self.grid_width = self.grid_size
         self.start = Cell(0, 0, True)
         self.end = Cell(self.grid_size-1, self.grid_size-1, True)
-        self.finalPosX = self.finalPosX
-        self.finalPosY = self.finalPosY
+        self.finalPosX = finalPosX
+        self.finalPosY = finalPosY
         self.finalPos = [self.finalPosX, self.finalPosY]
         self.targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12] ]
 
@@ -126,7 +126,7 @@ class AStar:
 
         cell = self.end
         grid[cell.y][cell.x] = 'T'
-        while cell.parent is not self.start:
+        while cell.parent:
             cell = cell.parent
             grid[cell.y][cell.x] = 'o'
             print('path: cell: %d,%d' % (cell.x, cell.y))
@@ -185,10 +185,11 @@ class AStar:
 
 n = AStar(finalPosX=4, finalPosY=6)
 for i in n.targets:
-    n = n
+    n = AStar(finalPosX=n.finalPos[0], finalPosY=n.finalPos[1])
     targetX = i[0]
     targetY = i[1]
     n.init_grid(startX=n.finalPos[0], startY=n.finalPos[1],
                 targetX=targetX, targetY=targetY)
     n.process()
     print(n.finalPos)
+
