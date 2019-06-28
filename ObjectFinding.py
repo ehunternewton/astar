@@ -39,7 +39,7 @@ class AStar:
         self.finalPosY = finalPosY
         self.finalPos = [self.finalPosX, self.finalPosY]
         self.path = []
-        # self.path = list(set(self.path))
+        self.path = list(set(self.path))
         self.targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12] ]
 
     def init_grid(self, startX, startY, targetX, targetY):
@@ -101,21 +101,6 @@ class AStar:
         if cell.y < self.grid_height-1:
             cells.append(self.get_cell(cell.x, cell.y+1))
         return cells
-
-    def display_final_path(self):
-        grid = []
-        for y in range(self.grid_height):
-            row = []
-            for x in range(self.grid_width):
-                if [x, y] in self.targets:
-                    row.append('T')
-                elif [x, y] in self.path:
-                    row.append('o')
-                else:
-                    row.append('-')
-            grid.append(row)
-        for row in grid:
-            print(row)
 
     def display_path(self):
         # grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -213,11 +198,8 @@ for i in n.targets:
     n.init_grid(startX=n.finalPos[0], startY=n.finalPos[1],
                 targetX=targetX, targetY=targetY)
     n.process()
-
     n.finalPos[0] = targetX
     n.finalPos[1] = targetY
     print(n.finalPos)
-
     print(n.path)
-    n.display_final_path()
 
