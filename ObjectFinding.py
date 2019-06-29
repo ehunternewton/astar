@@ -39,8 +39,8 @@ class AStar:
         self.finalPosY = finalPosY
         self.finalPos = [self.finalPosX, self.finalPosY]
         self.path = []
-        self.path = list(set(self.path))
-        self.targets = [ [2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12] ]
+        # self.path = list(set(self.path))
+        self.targets = [[2, 2], [7, 2], [12, 2], [2, 7], [7, 7], [12, 7], [2, 12], [7, 12], [12, 12]]
 
     def init_grid(self, startX, startY, targetX, targetY):
         walls = []
@@ -50,7 +50,6 @@ class AStar:
             wallsCoordinate.append(randint(0, self.grid_size-1))
             wallsCoordinate.append(randint(0, self.grid_size - 1))
             walls.append(wallsCoordinate)
-
 
         for x in range(self.grid_width):
             for y in range(self.grid_height):
@@ -102,6 +101,23 @@ class AStar:
             cells.append(self.get_cell(cell.x, cell.y+1))
         return cells
 
+    def display_final_path(self):
+        grid = []
+        for y in range(self.grid_height):
+            row = []
+            for x in range(self.grid_width):
+                if [self.cells[self.grid_size * x + y].x, self.cells[self.grid_size * x + y].y] in self.targets:
+                    row.append('T')
+                elif [self.cells[self.grid_size * x + y].x, self.cells[self.grid_size * x + y].y] == [4, 6]:
+                    row.append('S')
+                elif [self.cells[self.grid_size * x + y].x, self.cells[self.grid_size * x + y].y] in self.path:
+                    row.append('o')
+                else:
+                    row.append('-')
+            grid.append(row)
+        for r in grid:
+            print(r)
+
     def display_path(self):
         # grid = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         #         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -128,10 +144,11 @@ class AStar:
         cell = self.end
         grid[cell.y][cell.x] = 'T'
         while cell.parent:
+            path.append([cell.x, cell.y])
             cell = cell.parent
             grid[cell.y][cell.x] = 'o'
             print('path: cell: %d,%d' % (cell.x, cell.y))
-            path.append([cell.x, cell.y])
+        path.append([cell.x, cell.y])
         cell = self.start
         grid[cell.y][cell.x] = 'S'
         for row in grid:
@@ -190,6 +207,7 @@ class AStar:
 n = AStar(finalPosX=4, finalPosY=6)
 
 for i in n.targets:
+    print("navigating to target at position ", i)
     path = n.path
     n = AStar(finalPosX=n.finalPos[0], finalPosY=n.finalPos[1])
     n.path = path
@@ -200,6 +218,8 @@ for i in n.targets:
     n.process()
     n.finalPos[0] = targetX
     n.finalPos[1] = targetY
-    print(n.finalPos)
-    print(n.path)
+    # print(n.finalPos)
+    # print(n.path)
+    print('\n')
+    n.display_final_path()
 
